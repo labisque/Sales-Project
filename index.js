@@ -5,6 +5,14 @@ if(localStorage.length === 0){
 }
 
 const cards = JSON.parse(localStorage.getItem('DB'));
+const nameAddId = "product-name";
+const imageUrlAddId = "product-image";
+const descriptionAddId = "product-description";
+const priceAddId = "product-price";
+const nameEditId = "product-name-edit";
+const imageUrlEditId = "product-image-edit";
+const descriptionEditId = "product-description-edit";
+const priceEditId = "product-price-edit";
 
 function uniqueID() {
   return Math.floor(Date.now() + Math.random());
@@ -22,47 +30,47 @@ function render(cards) {
   }
 }
 
-function validate()
+function validate(name, imageUrl, description, price)
 {
-  if(document.getElementById('product-image').value == '')
+  if(document.getElementById(imageUrl).value == '')
         {
        alert("Please set image URL!");
-             document.getElementById('product-image').focus();
+             document.getElementById(imageUrl).focus();
        return false;
         }
 
-  else if(!isValidURL(document.getElementById('product-image').value))
+  else if(!isValidURL(document.getElementById(imageUrl).value))
               {
              alert("Please set a valid URL!");
-                   document.getElementById('product-image').focus();
+                   document.getElementById(imageUrl).focus();
              return false;
               }
 
-  else if(document.getElementById('product-name').value == '')
+  else if(document.getElementById(name).value == '')
         {
        alert("Please set a name!");
-              document.getElementById('product-name').focus();
+              document.getElementById(name).focus();
        return false;
         }
 
-  else if(document.getElementById('product-description').value == '')
+  else if(document.getElementById(description).value == '')
         {
       alert("Please write a description!");
-             document.getElementById('product-description').focus();
+             document.getElementById(description).focus();
       return false;
         }
 
-  else if(document.getElementById('product-price').value == '')
+  else if(document.getElementById(price).value == '')
         {
       alert("Please set a price!");
-            document.getElementById('product-price').focus();
+            document.getElementById(price).focus();
       return false;
         }
 
-  else if( isNaN(document.getElementById('product-price').value))
+  else if( isNaN(document.getElementById(price).value))
         {
         alert("Price must be a number!");
-              document.getElementById('product-price').focus();
+              document.getElementById(price).focus();
         return false;
         }
 
@@ -71,7 +79,7 @@ function validate()
 }
 
 function addCard(){
-  if (validate()){
+  if (validate(nameAddId, imageUrlAddId, descriptionAddId, priceAddId)){
   const productNameElement= document.getElementById('product-name');
   const productDescriptionElement=document.getElementById('product-description');
   const productPriceElement=document.getElementById('product-price');
@@ -108,6 +116,7 @@ function showEditModal(cardId){
 }
 
 function editCard(cardId) {
+  if (validate(nameEditId, imageUrlEditId, descriptionEditId, priceEditId)){
   const thisCardBox = document.getElementById(cardId);
   const db = JSON.parse(localStorage.getItem('DB'));
   for (let card of db)
@@ -123,7 +132,7 @@ function editCard(cardId) {
   }
   localStorage.setItem('DB', JSON.stringify(db));
   document.location.reload(true);
-}
+}}
 
 
 function deleteCard(cardId)
@@ -180,8 +189,8 @@ const modalFormsForEdit = ({title, description, price, img, id}) =>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick= "cutModal()">Close</button>
-        <button id="Submit"  type="button" class="btn btn-primary" data-dismiss="modal" onclick="editCard(${id})" >Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="Submit"  type="button" class="btn btn-primary"  onclick="editCard(${id})" >Save changes</button>
       </div>
     </div>
   </div>
@@ -192,9 +201,9 @@ const renderCardTemlate = ({title, description, price, img, id}) =>
 <div class="card" style="width: 18rem;">
   <img src="${img}" class="card-img-top" style= "height: 12rem; width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">${title}</h5>
-    <p class="card-text">${description}</p>
-    <p class="card-text">${price}</p>
+    <h5 class="card-title text-center">${title}</h5>
+    <p class="card-text text-center">${description}</p>
+    <p class="card-text text-right">${price}$</p>
     <div class="row justify-content-around">
     <button type="button" class="btn btn-warning custom-btn-width" id= "edit-card" onclick= "showEditModal(${id})" >Edit</button>
     <button type="button" class="btn btn-danger custom-btn-width" id= "delete-card" onclick= "deleteCard(${id})">Delete</button>
